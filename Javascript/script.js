@@ -1,9 +1,6 @@
-// variables to keep track of quiz state
 var currentQuestionNumber = 0;
 var time = questions.length * 10;
 var timerId;
-
-// variables to reference DOM elements
 var questionsElement = document.getElementById("questions");
 var timerElement = document.getElementById("time");
 var choicesElement = document.getElementById("choices");
@@ -12,65 +9,54 @@ var startBtn = document.getElementById("start");
 var initialsElement = document.getElementById("initials");
 var feedbackElement = document.getElementById("feedback");
 
+//This function will hide the start-screen element, start the quiz timer and call the getQuestion function
 function startQuiz() {
-  // hide start screen
+
   var startScreenEl = document.getElementById("start-screen");
   startScreenEl.setAttribute("class", "hide");
 
-  // un-hide questions section
   questionsElement.removeAttribute("class");
-
-  // start timer
   timerId = setInterval(clockTick, 1000);
-
-  // show starting time
   timerElement.textContent = time;
 
   getQuestion();
 }
 
+//This function will extract the first question from our questions array and display them
 function getQuestion() {
-  // get current question object from array
+  
   var currentQuestion = questions[currentQuestionNumber];
-
-  // update title with current question
   var titleEl = document.getElementById("question-title");
   titleEl.textContent = currentQuestion.title;
-
-  // clear out any old question choices
   choicesElement.innerHTML = "";
 
-  // loop over choices
+  // this will loop through "choices" for possible answers, creating a selectable button for each one 
   currentQuestion.choices.forEach(function(choice, i) {
-    // create new button for each choice
+
     var choiceNode = document.createElement("button");
+
     choiceNode.setAttribute("class", "choice");
     choiceNode.setAttribute("value", choice);
+    choiceNode.textContent = "- " + choice;
 
-    choiceNode.textContent = i + 1 + ". " + choice;
-
-    // attach click event listener to each choice
     choiceNode.onclick = questionClick;
-
-    // display on the page
     choicesElement.appendChild(choiceNode);
   });
 }
 
+
+//this function will validate the users input and subtract time if the answer is incorrect. It will also message the user with a Wrong or Correct feedback
 function questionClick() {
-  // check if user guessed wrong
+  
   if (this.value !== questions[currentQuestionNumber].answer) {
-    // penalize time
-    time -= 15;
+    
+    time -= 10;
 
     if (time < 0) {
       time = 0;
     }
 
-    // display new time on page
     timerElement.textContent = time;
-
-    
 
     feedbackElement.textContent = "Wrong!";
   } else {
@@ -79,16 +65,13 @@ function questionClick() {
     feedbackElement.textContent = "Correct!";
   }
 
-  // flash right/wrong feedback on page for half a second
   feedbackElement.setAttribute("class", "feedback");
   setTimeout(function() {
     feedbackElement.setAttribute("class", "feedback hide");
   }, 1000);
 
-  // move to next question
+  //Sends user to next question if there are any available 
   currentQuestionNumber++;
-
-  // check if we've run out of questions
   if (currentQuestionNumber === questions.length) {
     quizEnd();
   } else {
@@ -96,69 +79,62 @@ function questionClick() {
   }
 }
 
+//this function will be used when there are no more questions, bringing up the end-screen element and saving your final score
 function quizEnd() {
-  // stop timer
+ 
   clearInterval(timerId);
 
-  // show end screen
-  var endScreenEl = document.getElementById("end-screen");
-  endScreenEl.removeAttribute("class");
+  
+  var endScreenElement = document.getElementById("end-screen");
+  endScreenElement.removeAttribute("class");
 
-  // show final score
   var finalScoreEl = document.getElementById("final-score");
   finalScoreEl.textContent = time;
 
-  // hide questions section
   questionsElement.setAttribute("class", "hide");
 }
 
+//function to end the game if timer hits 0
 function clockTick() {
-  // update time
   time--;
   timerElement.textContent = time;
-
-  // check if user ran out of time
   if (time <= 0) {
     quizEnd();
   }
 }
 
+//this will save the users high score
 function saveHighscore() {
-  // get value of input box
-  var initials = initialsElement.value.trim();
 
-  // make sure value wasn't empty
+  var initials = initialsElement.value.trim();
+//if initials are not void, save a new highscore for the user and make it visible to user
   if (initials !== "") {
-    // get saved scores from localstorage, or if not any, set to empty array
     var highscores =
       JSON.parse(window.localStorage.getItem("highscores")) || [];
 
-    // format new score object for current user
     var newScore = {
       score: time,
       initials: initials
     };
 
-    // save to localstorage
+    // save high score to local storage
     highscores.push(newScore);
     window.localStorage.setItem("highscores", JSON.stringify(highscores));
 
-    // redirect to next page
     window.location.href = "highscores.html";
   }
 }
 
 function checkForEnter(event) {
-  // "13" represents the enter key
   if (event.key === "Enter") {
     saveHighscore();
   }
 }
 
-// user clicks button to submit initials
+
 submitBtn.onclick = saveHighscore;
 
-// user clicks button to start quiz
+
 startBtn.onclick = startQuiz;
 
 initialsElement.onkeyup = checkForEnter;

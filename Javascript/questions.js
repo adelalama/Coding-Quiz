@@ -1,35 +1,34 @@
-// list of all questions, choices, and answers
 var questions = [
     {
-      title: "Commonly used data types DO NOT include:",
-      choices: ["strings", "booleans", "alerts", "numbers"],
-      answer: "alerts"
+      title: "Which of these is not a primitive data type?",
+      choices: ["strings", "booleans", "bytes", "numbers"],
+      answer: "strings"
     },
     {
-      title: "The condition in an if / else statement is enclosed within ____.",
-      choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
+      title: "Which of these is not a common programming language?",
+      choices: ["javascript", "python", "C#", "CSV"],
+      answer: "CSV"
+    },
+    {
+      title: "Which of these is not commonly used for a loop clause:",
+      choices: [
+        "if/else",
+        "for",
+        "while",
+        "do/while"
+      ],
+      answer: "if/else"
+    },
+    {
+      title:
+        "The conditionals of an if clause should be written between: ",
+      choices: ["commas", "curly brackets", "quotes", "parentheses"],
       answer: "parentheses"
     },
     {
-      title: "Arrays in JavaScript can be used to store ____.",
-      choices: [
-        "numbers and strings",
-        "other arrays",
-        "booleans",
-        "all of the above"
-      ],
-      answer: "all of the above"
-    },
-    {
       title:
-        "String values must be enclosed within ____ when being assigned to variables.",
-      choices: ["commas", "curly brackets", "quotes", "parentheses"],
-      answer: "quotes"
-    },
-    {
-      title:
-        "A very useful tool used during development and debugging for printing content to the debugger is:",
-      choices: ["JavaScript", "terminal / bash", "for loops", "console.log"],
+        "A tool used for Developers to work together in an organized way: ",
+      choices: ["JavaScript", "GitHub", "HTML", "AWS"],
       answer: "console.log"
     }
   ];
